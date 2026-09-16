@@ -11,11 +11,6 @@ Segure **Ctrl+Win**, fale, solte. O que você disse é transcrito, limpo (sem he
 autocorreções da fala) e formatado no estilo do perfil ativo — e-mail, jurídico, WhatsApp,
 roteiro — direto no campo onde o cursor estiver.
 
-Exemplo real do comportamento: ditar *"Certifico que fui até o endereço, é, não, melhor,
-dirigi-me ao endereço indicado no mandado... deixa eu corrigir, o imóvel pertence ao pai da
-parte..."* produz *"Certifico que me dirigi ao endereço indicado no mandado. No local, fui
-informado de que o imóvel pertence ao genitor da parte..."*.
-
 ## Instalação (usuários)
 
 Não precisa saber programar. Você vai precisar de duas chaves gratuitas (5 minutos, sem cartão
