@@ -80,37 +80,3 @@ python -m venv .venv
 Depois ajuste `python` e `sidecar` no `%APPDATA%\Speecher\settings.json` para os caminhos do seu
 clone, e escolha o provedor "Local" nas configurações. Na primeira execução o modelo (~1,6GB) é
 baixado automaticamente.
-
-## Arquitetura
-
-```
-[Hook de teclado global (Rust: WH_KEYBOARD_LL)]
-        segura Ctrl+Win ──> [cpal grava WAV do microfone]
-        solta ↓
-[Transcrição (STT)]  Groq whisper-large-v3-turbo (nuvem, padrão)
-                     ⇅ fallback automático bidirecional
-                     faster-whisper large-v3-turbo local (GPU, sidecar Python residente)
-        texto bruto ↓
-[Reescrita]  Gemini Flash Lite (free tier, com fallback de modelo) + regras de edição
-             + dicionário + perfil de escrita ativo
-        texto final ↓
-[Inserção]  clipboard + Ctrl+V sintético (com backup/restauração do clipboard)
-```
-
-Durante a gravação o overlay mostra as ondas; ao soltar o atalho ele passa a três pontos
-("processando") e só some quando o texto entra. Se algo falhar no caminho, o motivo aparece
-ali mesmo em vez de sumir no console. `Esc` durante a gravação descarta o ditado.
-
-- **App**: Tauri 2 (Rust) + React/TypeScript — bandeja do sistema, overlay de ondas reativas
-  ao microfone (2 estilos), janela de configurações com abas (Geral, Perfis,
-  Dicionário, Snippets, Histórico, Diagnóstico), temas claro/escuro.
-- **Sidecar STT local**: `sidecar/stt_server.py` — servidor HTTP local com faster-whisper na
-  GPU; morre junto com o app (vigia o PID pai) e recusa porta duplicada.
-- **Dados**: tudo local em `%APPDATA%\Speecher\` — settings.json com as chaves, history.jsonl.
-  Histórico é desligável e apagável pela UI. As chaves são cifradas por usuário (DPAPI,
-  prefixo `enc:`).
-- **Plataforma**: camada específica isolada em `app/src-tauri/src/platform/windows.rs`
-  (hook de teclado, proteção de chaves, atalho de colar, sidecar).
-
-Já entregues desde a v0.1.0: instalador NSIS, autostart com toggle, idiomas de fala/saída com
-tradução, dicionário com campos separados, single-instance, chaves criptografadas via DPAPI.
