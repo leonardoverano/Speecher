@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Tauri + React + Typescript</title>
+    <!-- a janela do overlay nasce visível e o body tem fundo opaco do tema: sem
+         isto, o retângulo do overlay pisca na tela até o React montar -->
+    <script>
+      if (location.search.includes("overlay=1")) {
+        document.write(
+          "<style>html,body{background:transparent!important;margin:0;overflow:hidden}</style>",
+        );
+      }
+    </script>
+  </head>
+
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

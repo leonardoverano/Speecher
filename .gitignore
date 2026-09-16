@@ -1,0 +1,31 @@
+# builds e dependências
+app/src-tauri/target/
+app/node_modules/
+app/dist/
+.venv/
+
+# protótipos e artefatos de teste locais
+spike/
+
+# nunca versionar segredos ou dados do usuário
+# (settings.json com chaves vive em %APPDATA%\Speecher, fora do repo)
+*.log
+*.bak
+
+# instruções locais do Claude (contém caminhos e ambiente da máquina).
+# O CLAUDE.md é versionado de propósito: é por ele que o agente da outra máquina
+# aprende as regras do projeto. Só o .local.md fica de fora.
+CLAUDE.local.md
+.claude/
+
+# resultados do benchmark de reescrita (bench/ e ferramenta, out/ e descartavel)
+bench/out/
+__pycache__/
+
+# grafo de conhecimento gerado localmente (graphify)
+graphify-out/
+
+# arte de divulgação do canal, não do app
+docs/cartão youtube.png
+
+.DS_Store
