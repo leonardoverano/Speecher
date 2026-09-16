@@ -16,10 +16,6 @@ dirigi-me ao endereço indicado no mandado... deixa eu corrigir, o imóvel perte
 parte..."* produz *"Certifico que me dirigi ao endereço indicado no mandado. No local, fui
 informado de que o imóvel pertence ao genitor da parte..."*.
 
-<p align="center"><img src="docs/img/ui.png" width="640" alt="Janela de configurações"></p>
-<p align="center"><img src="docs/img/overlay.png" width="400" alt="Overlay de ondas durante o ditado"><br>
-<i>Enquanto você fala, uma onda discreta aparece na parte inferior da tela.</i></p>
-
 ## Instalação (usuários)
 
 Não precisa saber programar. Você vai precisar de duas chaves gratuitas (5 minutos, sem cartão
