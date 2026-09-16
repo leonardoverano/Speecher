@@ -1,13 +1,13 @@
 <p align="center"><img src="docs/logo.png" width="128" alt="Speecher"></p>
 <h1 align="center">Speecher</h1>
 <p align="center"><b>Segure uma tecla, fale, solte — o texto sai pronto onde o cursor estiver.</b><br>
-Ditado inteligente para Windows e macOS: transcrição + limpeza + formatação por perfil, em ~2s e R$ 0/mês.</p>
+Ditado inteligente para Windows: transcrição + limpeza + formatação por perfil, em ~2s e R$ 0/mês.</p>
 <p align="center">
-  <a href="../../releases"><img src="https://img.shields.io/github/v/release/leonardoverano/Speecher" alt="release"></a>
-  <img src="https://img.shields.io/badge/plataforma-Windows%2011%20%7C%20macOS-blue" alt="Windows 11 | macOS">
+  <a href="../../releases"><img src="https://img.shields.io/badge/release-latest-blue" alt="release"></a>
+  <img src="https://img.shields.io/badge/plataforma-Windows%2011-blue" alt="Windows 11">
 </p>
 
-Segure **Ctrl+Win** (Windows) ou **Ctrl+Option** (Mac), fale, solte. O que você disse é transcrito, limpo (sem hesitações e
+Segure **Ctrl+Win**, fale, solte. O que você disse é transcrito, limpo (sem hesitações e
 autocorreções da fala) e formatado no estilo do perfil ativo — e-mail, jurídico, WhatsApp,
 roteiro — direto no campo onde o cursor estiver.
 
@@ -25,36 +25,13 @@ informado de que o imóvel pertence ao genitor da parte..."*.
 Não precisa saber programar. Você vai precisar de duas chaves gratuitas (5 minutos, sem cartão
 de crédito) e do instalador.
 
-<!-- ATENÇÃO — NÃO TROCAR OS DOIS LINKS ABAIXO POR /releases/latest NEM POR UMA TAG ESPECÍFICA.
-     /releases/latest é UMA release só, a do último build feito: depois de um build Windows ela
-     não tem .dmg, depois de um build Mac não tem .exe. Foi assim que o link do Mac passou a
-     levar ao .exe e cada máquina "consertou" apontando para a sua própria tag, quebrando o
-     outro lado. Não existe URL do GitHub que resolva para "a release mais recente que tem
-     .dmg" — a lista completa é o único link que nunca mente. Só volte a usar /latest se toda
-     release passar a sair com os dois instaladores juntos. -->
-
 **1. Baixe e instale**
-
-*Windows:*
 
 - Vá em [Releases](../../releases) e baixe o `Speecher_x.y.z_x64-setup.exe` mais recente da lista
 - Execute. O Windows SmartScreen vai avisar que o app não é reconhecido (ele não tem assinatura
   digital paga): clique em **"Mais informações" → "Executar assim mesmo"**. O código-fonte
   completo está neste repositório para quem quiser auditar.
 - Ao final, o Speecher aparece como um ícone na bandeja do sistema (perto do relógio)
-
-*macOS (Apple Silicon):*
-
-- Vá em [Releases](../../releases) e baixe o `Speecher_x.y.z_aarch64.dmg` mais recente da lista
-  — nem toda release traz os dois sistemas (o build de cada um sai na máquina dele), então a
-  release mais nova pode ter só o `.exe`. Desça até a primeira que tenha `.dmg`.
-- Abra o DMG e arraste o Speecher para **Aplicativos**
-- Na primeira abertura, o Gatekeeper vai bloquear (app sem assinatura paga da Apple): vá em
-  **Ajustes → Privacidade e Segurança** e clique em **"Abrir Assim Mesmo"**
-- Conceda as permissões que o app pedir: **Acessibilidade** e **Monitoramento de Entrada**
-  (para o atalho global) e **Microfone**. Se alguma não aparecer, adicione o Speecher
-  manualmente em Ajustes → Privacidade e Segurança
-- O app fica como um ícone na barra de menus (sem ícone no Dock)
 
 **2. Crie as duas chaves gratuitas**
 
@@ -74,8 +51,8 @@ Ambas usam login Google e não pedem cartão.
 
 **4. Use**
 
-Clique em qualquer campo de texto (e-mail, WhatsApp Web, Word...), **segure Ctrl+Win (Windows)
-ou Ctrl+Option (Mac), fale, e solte**. Uma onda discreta aparece no rodapé da tela enquanto você fala; ~2 segundos depois de
+Clique em qualquer campo de texto (e-mail, WhatsApp Web, Word...), **segure Ctrl+Win, fale, e
+solte**. Uma onda discreta aparece no rodapé da tela enquanto você fala; ~2 segundos depois de
 soltar, o texto limpo aparece onde o cursor estava. Na aba **Perfis** você escolhe o estilo do
 texto (natural, e-mail, jurídico formal, WhatsApp curto, roteiro).
 
@@ -94,7 +71,7 @@ A transcrição pode rodar 100% na sua máquina (o áudio nunca sai do PC), como
 ou como provedor principal:
 
 ```powershell
-git clone https://github.com/leonardoverano/Speecher
+git clone <URL-DO-REPOSITORIO>
 cd Speecher
 python -m venv .venv
 .venv\Scripts\pip install faster-whisper nvidia-cublas-cu12 nvidia-cudnn-cu12
@@ -107,8 +84,8 @@ baixado automaticamente.
 ## Arquitetura
 
 ```
-[Hook de teclado global (Rust: WH_KEYBOARD_LL no Windows / CGEventTap no Mac)]
-        segura Ctrl+Win (Win) ou Ctrl+Option (Mac) ──> [cpal grava WAV do microfone]
+[Hook de teclado global (Rust: WH_KEYBOARD_LL)]
+        segura Ctrl+Win ──> [cpal grava WAV do microfone]
         solta ↓
 [Transcrição (STT)]  Groq whisper-large-v3-turbo (nuvem, padrão)
                      ⇅ fallback automático bidirecional
@@ -117,7 +94,7 @@ baixado automaticamente.
 [Reescrita]  Gemini Flash Lite (free tier, com fallback de modelo) + regras de edição
              + dicionário + perfil de escrita ativo
         texto final ↓
-[Inserção]  clipboard + Ctrl+V/Cmd+V sintético (com backup/restauração do clipboard)
+[Inserção]  clipboard + Ctrl+V sintético (com backup/restauração do clipboard)
 ```
 
 Durante a gravação o overlay mostra as ondas; ao soltar o atalho ele passa a três pontos
@@ -129,13 +106,11 @@ ali mesmo em vez de sumir no console. `Esc` durante a gravação descarta o dita
   Dicionário, Snippets, Histórico, Diagnóstico), temas claro/escuro.
 - **Sidecar STT local**: `sidecar/stt_server.py` — servidor HTTP local com faster-whisper na
   GPU; morre junto com o app (vigia o PID pai) e recusa porta duplicada.
-- **Dados**: tudo local em `%APPDATA%\Speecher\` (Windows) ou
-  `~/Library/Application Support/Speecher/` (Mac) — settings.json com as chaves, history.jsonl.
-  Histórico é desligável e apagável pela UI. No Windows as chaves são cifradas por usuário
-  (DPAPI, prefixo `enc:`); no Mac ficam em texto, protegidas pelas permissões do perfil.
-- **Plataformas**: mesmo código, com a camada específica isolada em
-  `app/src-tauri/src/platform/{windows,macos}.rs` (hook de teclado, proteção de chaves,
-  atalho de colar, sidecar).
+- **Dados**: tudo local em `%APPDATA%\Speecher\` — settings.json com as chaves, history.jsonl.
+  Histórico é desligável e apagável pela UI. As chaves são cifradas por usuário (DPAPI,
+  prefixo `enc:`).
+- **Plataforma**: camada específica isolada em `app/src-tauri/src/platform/windows.rs`
+  (hook de teclado, proteção de chaves, atalho de colar, sidecar).
 
 Já entregues desde a v0.1.0: instalador NSIS, autostart com toggle, idiomas de fala/saída com
 tradução, dicionário com campos separados, single-instance, chaves criptografadas via DPAPI.
